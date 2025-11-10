@@ -11,7 +11,7 @@ body {
 }
 
 header {
-    background: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(135deg,black 1%, rgb(241, 101, 150) 99%);
     padding: 20px 0;
     position: sticky;
     top: 0;
@@ -48,7 +48,7 @@ nav {
 }
 
 .nav-links a:hover {
-    color: #ffd700;
+    color: #eaeaeb;
 }
 
 .nav-links a::after {
@@ -58,7 +58,7 @@ nav {
     left: 0;
     width: 0;
     height: 2px;
-    background: #ffd700;
+    background: #a6ddb7;
     transition: width 0.3s;
 }
 
@@ -216,7 +216,7 @@ nav {
 }
 
 footer {
-    background: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(135deg,black 1%, rgb(241, 101, 150) 99%);
     text-align: center;
     padding: 30px 20px;
     margin-top: 60px;
