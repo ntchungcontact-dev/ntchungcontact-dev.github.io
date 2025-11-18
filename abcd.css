@@ -187,17 +187,17 @@ a {
     transform: translateY(-2px);
 }
 
-.hero-hinh {
+.xmen-hinh {
     position: relative;
 }
 
-.hero-hinh img {
+.xmen-hinh img {
     border-radius: 24px;
     width: 100%;
     height: 520px;
 }
 
-.hero-chi-so {
+.xmen-chi-so {
     position: absolute;
     bottom: 20px;
     right: 30px;
@@ -207,13 +207,13 @@ a {
     text-align: right;
 }
 
-.hero-chi-so span {
+.xmen-chi-so span {
     font-size: 12px;
     letter-spacing: 3px;
     color: var(--mau-phu);
 }
 
-.hero-chi-so strong {
+.xmen-chi-so strong {
     display: block;
     font-size: 32px;
     letter-spacing: 4px;
