@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euler Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div class="brand-mark">E</div>
+      <div>
+        <p class="eyebrow">ĐỒ THỊ RỜI RẠC</p>
+        <h1>Thế Chung</h1>
+      </div>
+      <span class="status-pill"><span class="status-dot"></span> Sẵn sàng nhập</span>
+    </header>
+
+    <section class="intro">
+      <div>
+        <p class="eyebrow">KIỂM TRA VÀ VẼ ĐỒ THỊ</p>
+        <h2>Đường đi, chu trình Euler</h2>
+      </div>
+      <p class="intro-copy">Công cụ sẽ kiểm tra đồ thị có chu trình Euler hoặc đường đi Euler, sau đó nối các đỉnh thành hình để bạn dễ quan sát.</p>
+    </section>
+
+    <section class="workspace">
+      <aside class="input-panel panel">
+        <div class="panel-heading">
+          <span class="step-number">01</span>
+          <div><p class="eyebrow">DỮ LIỆU ĐẦU VÀO</p><h3>Nhập đồ thị</h3></div>
+        </div>
+        <div class="guide">
+          <strong>Nhập theo 2 bước</strong>
+          <p>Ví dụ bên dưới tạo thành một tam giác: A nối B, B nối C, C nối A.</p>
+        </div>
+        <label for="vertices">Tên các đỉnh</label>
+        <input id="vertices" type="text" value="A B C" autocomplete="off">
+        <small>Cách nhau bằng dấu cách, ví dụ: <code>A B C D</code></small>
+
+        <label for="edges">Danh sách cạnh</label>
+        <textarea id="edges" rows="7" spellcheck="false">A B
+B C
+C A</textarea>
+        <small>Mỗi dòng là một cạnh gồm đúng 2 đỉnh.</small>
+
+        <div class="button-row">
+          <button id="analyze" class="primary-button" type="button">Phân tích đồ thị <span>→</span></button>
+          <button id="reset" class="icon-button" type="button" aria-label="Đặt lại ví dụ" title="Đặt lại ví dụ">↺</button>
+        </div>
+        <p id="input-error" class="input-error" role="alert"></p>
+      </aside>
+
+      <section class="result-panel panel">
+        <div class="panel-heading">
+          <span class="step-number">02</span>
+          <div><p class="eyebrow">ĐỊNH LÝ EULER</p><h3>Kết quả kiểm tra</h3></div>
+        </div>
+        <div id="result" class="result-empty">
+          <span class="result-icon">?</span>
+          <p>Nhập dữ liệu rồi bấm <strong>Phân tích đồ thị</strong>.</p>
+        </div>
+        <div id="details" class="details hidden"></div>
+      </section>
+
+      <section class="visual-panel panel">
+        <div class="visual-heading">
+          <div class="panel-heading">
+            <span class="step-number">03</span>
+            <div><p class="eyebrow">SƠ ĐỒ TRỰC QUAN</p><h3>Hình đồ thị</h3></div>
+          </div>
+          <div class="legend"><span class="legend-line"></span> Đường đi Euler</div>
+        </div>
+        <div class="canvas-wrap">
+          <svg id="graph" viewBox="0 0 720 460" role="img" aria-label="Hình đồ thị sẽ xuất hiện ở đây"></svg>
+          <div id="canvas-empty" class="canvas-empty">Hình đồ thị sẽ xuất hiện ở đây</div>
+        </div>
+        <div id="trail" class="trail-box hidden"></div>
+      </section>
+    </section>
+
+    <footer><span>0 đỉnh bậc lẻ → chu trình</span><span>2 đỉnh bậc lẻ → đường đi</span><span>Khác → không phải Euler</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
