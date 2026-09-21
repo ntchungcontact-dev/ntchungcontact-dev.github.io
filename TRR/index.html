@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Euler Studio</title>
+  <title>Euler & Hamilton Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -12,10 +12,10 @@
 <body>
   <main class="page-shell">
     <header class="topbar">
-      <div class="brand-mark">E</div>
+      <div class="brand-mark"></div>
       <div>
-        <p class="eyebrow">ĐỒ THỊ RỜI RẠC</p>
-        <h1>Thế Chung</h1>
+        <p class="eyebrow">TOÁN RỜI RẠC</p>
+        <h1>NguyenTheChung</h1>
       </div>
       <span class="status-pill"><span class="status-dot"></span> Sẵn sàng nhập</span>
     </header>
@@ -23,9 +23,9 @@
     <section class="intro">
       <div>
         <p class="eyebrow">KIỂM TRA VÀ VẼ ĐỒ THỊ</p>
-        <h2>Đường đi, chu trình Euler</h2>
+        <h2>Euler và Hamilton</h2>
       </div>
-      <p class="intro-copy">Công cụ sẽ kiểm tra đồ thị có chu trình Euler hoặc đường đi Euler, sau đó nối các đỉnh thành hình để bạn dễ quan sát.</p>
+      <p class="intro-copy">Công cụ tự kiểm tra cả Euler và Hamilton, phân loại chu trình hoặc đường đi, rồi nối lộ trình lên hình để bạn dễ quan sát.</p>
     </section>
 
     <section class="workspace">
@@ -35,9 +35,15 @@
           <div><p class="eyebrow">DỮ LIỆU ĐẦU VÀO</p><h3>Nhập đồ thị</h3></div>
         </div>
         <div class="guide">
-          <strong>Nhập theo 2 bước</strong>
-          <p>Ví dụ bên dưới tạo thành một tam giác: A nối B, B nối C, C nối A.</p>
+          <strong>Chọn loại đồ thị cần kiểm tra</strong>
+          <p>Euler xét mỗi cạnh đúng một lần; Hamilton xét mỗi đỉnh đúng một lần.</p>
         </div>
+        <label for="graph-type">Loại kiểm tra</label>
+        <select id="graph-type">
+          <option value="auto" selected>Tự động: Euler hoặc Hamilton</option>
+          <option value="euler">Euler / Hierholzer</option>
+          <option value="hamilton">Hamilton</option>
+        </select>
         <label for="vertices">Tên các đỉnh</label>
         <input id="vertices" type="text" value="A B C" autocomplete="off">
         <small>Cách nhau bằng dấu cách, ví dụ: <code>A B C D</code></small>
@@ -46,7 +52,7 @@
         <textarea id="edges" rows="7" spellcheck="false">A B
 B C
 C A</textarea>
-        <small>Mỗi dòng là một cạnh gồm đúng 2 đỉnh.</small>
+        <small>Mỗi dòng là một cạnh gồm đúng 2 đỉnh đã khai báo, ví dụ <code>A B</code>.</small>
 
         <div class="button-row">
           <button id="analyze" class="primary-button" type="button">Phân tích đồ thị <span>→</span></button>
@@ -58,7 +64,7 @@ C A</textarea>
       <section class="result-panel panel">
         <div class="panel-heading">
           <span class="step-number">02</span>
-          <div><p class="eyebrow">ĐỊNH LÝ EULER</p><h3>Kết quả kiểm tra</h3></div>
+          <div><p id="result-eyebrow" class="eyebrow">TỰ ĐỘNG PHÂN LOẠI</p><h3>Kết quả kiểm tra</h3></div>
         </div>
         <div id="result" class="result-empty">
           <span class="result-icon">?</span>
@@ -73,7 +79,7 @@ C A</textarea>
             <span class="step-number">03</span>
             <div><p class="eyebrow">SƠ ĐỒ TRỰC QUAN</p><h3>Hình đồ thị</h3></div>
           </div>
-          <div class="legend"><span class="legend-line"></span> Đường đi Euler</div>
+          <div id="legend-text" class="legend"><span class="legend-line"></span> Lộ trình</div>
         </div>
         <div class="canvas-wrap">
           <svg id="graph" viewBox="0 0 720 460" role="img" aria-label="Hình đồ thị sẽ xuất hiện ở đây"></svg>
@@ -83,7 +89,7 @@ C A</textarea>
       </section>
     </section>
 
-    <footer><span>0 đỉnh bậc lẻ → chu trình</span><span>2 đỉnh bậc lẻ → đường đi</span><span>Khác → không phải Euler</span></footer>
+    <footer id="footer-guide"><span>Euler: đi qua mỗi cạnh đúng một lần</span><span>Hamilton: đi qua mỗi đỉnh đúng một lần</span></footer>
   </main>
   <script src="app.js"></script>
 </body>
