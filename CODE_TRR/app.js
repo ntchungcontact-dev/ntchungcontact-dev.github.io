@@ -28,6 +28,29 @@ function parseGraph() {
   return { vertices, edges };
 }
 
+function findEulerTrailHierholzer(adjacency, vertices, edges, kind, odd, active) {
+  if (kind === 'none') return { trail: null, trailEdges: null };
+  const used = new Set();
+  const start = kind === 'path' ? odd[0] : active[0];
+  const stack = [{ vertex: start, edgeId: null }];
+  const reversed = [];
+  const reversedEdges = [];
+  while (stack.length) {
+    const current = stack[stack.length - 1].vertex;
+    const next = adjacency.get(current).find(item => !used.has(item.id));
+    if (next) { used.add(next.id); stack.push({ vertex: next.vertex, edgeId: next.id }); }
+    else {
+      const item = stack.pop();
+      reversed.push(item.vertex);
+      if (item.edgeId !== null) reversedEdges.push(item.edgeId);
+    }
+  }
+  const trail = reversed.reverse();
+  const trailEdges = reversedEdges.reverse();
+  if (used.size !== edges.length || trail.length !== edges.length + 1) return { trail: null, trailEdges: null };
+  return { trail, trailEdges };
+}
+
 function analyzeGraph(vertices, edges) {
   const adjacency = new Map(vertices.map(vertex => [vertex, []]));
   edges.forEach((edge, id) => {
@@ -55,32 +78,8 @@ function analyzeGraph(vertices, edges) {
   else if (edges.length && !connected) reason = 'Các đỉnh có cạnh không nằm trong cùng một thành phần liên thông.';
   else if (edges.length) reason = `Có ${odd.length} đỉnh bậc lẻ; cần 0 hoặc 2 đỉnh.`;
 
-  let trail = null;
-  let trailEdges = null;
-  if (kind !== 'none') {
-    const used = new Set();
-    const start = kind === 'path' ? odd[0] : active[0];
-    const stack = [{ vertex: start, edgeId: null }];
-    const reversed = [];
-    const reversedEdges = [];
-    while (stack.length) {
-      const current = stack[stack.length - 1].vertex;
-      const next = adjacency.get(current).find(item => !used.has(item.id));
-      if (next) { used.add(next.id); stack.push({ vertex: next.vertex, edgeId: next.id }); }
-      else {
-        const item = stack.pop();
-        reversed.push(item.vertex);
-        if (item.edgeId !== null) reversedEdges.push(item.edgeId);
-      }
-    }
-    trail = reversed.reverse();
-    trailEdges = reversedEdges.reverse();
-    if (used.size !== edges.length || trail.length !== edges.length + 1) {
-      trail = null;
-      trailEdges = null;
-    }
-  }
-  return { degrees, odd, connected, kind, reason, trail, trailEdges };
+  const { trail, trailEdges } = findEulerTrailHierholzer(adjacency, vertices, edges, kind, odd, active);
+  return { degrees, odd, connected, kind, reason, trail, trailEdges, algorithm: 'Hierholzer' };
 }
 
 function analyzeHamilton(vertices, edges) {
@@ -138,7 +137,7 @@ function renderAutomaticResult(graph, euler, hamilton) {
   resultBox.innerHTML = `<strong>${hasResult ? 'Đã phân loại đồ thị' : 'Không thuộc loại Euler hoặc Hamilton'}</strong><span>${eulerText} · ${hamiltonText}</span>`;
   const degreeText = graph.vertices.map(vertex => `${vertex} = ${euler.degrees[vertex] ?? hamilton.degrees[vertex] ?? 'không có'}`).join(', ');
   detailsBox.classList.remove('hidden');
-  detailsBox.innerHTML = `<div class="detail-row"><span>Số đỉnh</span><strong>${graph.vertices.length}</strong></div><div class="detail-row"><span>Số cạnh</span><strong>${graph.edges.length}</strong></div><div class="detail-row"><span>Bậc từng đỉnh</span><strong>${degreeText}</strong></div><div class="detail-row"><span>Kết luận Euler</span><strong>${eulerText}</strong></div><div class="detail-row"><span>Kết luận Hamilton</span><strong>${hamiltonText}</strong></div>`;
+  detailsBox.innerHTML = `<div class="detail-row"><span>Số đỉnh</span><strong>${graph.vertices.length}</strong></div><div class="detail-row"><span>Số cạnh</span><strong>${graph.edges.length}</strong></div><div class="detail-row"><span>Bậc từng đỉnh</span><strong>${degreeText}</strong></div><div class="detail-row"><span>Thuật toán Euler</span><strong>${euler.algorithm}</strong></div><div class="detail-row"><span>Kết luận Euler</span><strong>${eulerText}</strong></div><div class="detail-row"><span>Kết luận Hamilton</span><strong>${hamiltonText}</strong></div>`;
   const eulerRoute = euler.trail ? `Euler: ${euler.trail.join(' → ')}` : '';
   const hamiltonRoute = hamilton.path ? `Hamilton: ${hamilton.path.join(' → ')}` : '';
   const routes = [eulerRoute, hamiltonRoute].filter(Boolean);
@@ -157,7 +156,7 @@ function renderResult(graph, result) {
   resultBox.innerHTML = `<strong>${titles[result.kind]}</strong><span>${descriptions[result.kind]}</span>`;
   detailsBox.classList.remove('hidden');
   const degreeText = graph.vertices.map(vertex => `${vertex} = ${result.degrees[vertex] ?? 'không có'}`).join(', ');
-  detailsBox.innerHTML = `<div class="detail-row"><span>Số đỉnh</span><strong>${graph.vertices.length}</strong></div><div class="detail-row"><span>Số cạnh</span><strong>${graph.edges.length}</strong></div><div class="detail-row"><span>Bậc từng đỉnh</span><strong>${degreeText}</strong></div><div class="detail-row"><span>Liên thông</span><strong>${result.connected ? 'Có' : 'Không xác định'}</strong></div><div class="detail-row"><span>Lý do</span><strong>${result.reason}</strong></div>`;
+  detailsBox.innerHTML = `<div class="detail-row"><span>Số đỉnh</span><strong>${graph.vertices.length}</strong></div><div class="detail-row"><span>Số cạnh</span><strong>${graph.edges.length}</strong></div><div class="detail-row"><span>Bậc từng đỉnh</span><strong>${degreeText}</strong></div><div class="detail-row"><span>Thuật toán</span><strong>${isHamilton ? 'Quay lui' : 'Hierholzer'}</strong></div><div class="detail-row"><span>Liên thông</span><strong>${result.connected ? 'Có' : 'Không xác định'}</strong></div><div class="detail-row"><span>Lý do</span><strong>${result.reason}</strong></div>`;
   const route = isHamilton ? result.path : result.trail;
   if (route) { trailBox.classList.remove('hidden'); trailBox.textContent = `Lộ trình ${isHamilton ? 'Hamilton' : 'Hierholzer'}: ${route.join(' → ')}`; }
   else { trailBox.classList.add('hidden'); }
